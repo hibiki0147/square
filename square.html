@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Square</title>
+  <script src="./square.js" ></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+    }
+    .blueText {
+      color: blue;
+      transform: rotate(180deg);
+    }
+    .redText {
+      color: red;
+    }
+    .square {
+      position: relative;
+      padding-top: 75vmin;
+      width: 75vmin;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      position: absolute;
+      top: 0;
+      padding-right: 16px;
+      padding-bottom: 16px;
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+    }
+    .mass {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .mass button {
+      position: absolute;
+      background-color: black;
+      border: solid 1px black;
+      border-radius: 16px;
+    }
+    .mass button:nth-child(1) {
+      top: 0;
+      left: 16px;
+      width: calc(100% - 16px);
+      height: 16px;
+    }
+    .mass button:nth-child(2) {
+      top: 16px;
+      left: 0rem;
+      width: 16px;
+      height: calc(100% - 16px);
+    }
+    .mass button:nth-child(3) {
+      top: calc(50% + 0.5rem);
+      left: calc(50% + 0.5rem);
+      width: 16px;
+      height: calc(141.421356% - 16px);
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+    .mass button:nth-child(4) {
+      top: 16px;
+      right: -16px;
+      width: 16px;
+      height: calc(100% - 16px);
+    }
+    .mass:nth-child(7) button:nth-child(4),
+    .mass:nth-child(8) button:nth-child(4),
+    .mass:nth-child(9) button:nth-child(5) {
+      left: 16px;
+      top: auto;
+      bottom: -16px;
+      width: calc(100% - 16px);
+      height: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div>
+      <button class="redo">Redo</button>
+    </div>
+    <span class="blueText">Blue turn</span>
+    <div class="square">
+      <div class="grid">
+        <div class="mass">
+          <button data-id="0"></button>
+          <button data-id="3"></button>
+          <button data-id="4"></button>
+        </div>
+        <div class="mass">
+          <button data-id="1"></button>
+          <button data-id="5"></button>
+          <button data-id="6"></button>
+        </div>
+        <div class="mass">
+          <button data-id="2"></button>
+          <button data-id="7"></button>
+          <button data-id="8"></button>
+          <button data-id="9"></button>
+        </div>
+        <div class="mass">
+          <button data-id="10"></button>
+          <button data-id="13"></button>
+          <button data-id="14"></button>
+        </div>
+        <div class="mass">
+          <button data-id="11"></button>
+          <button data-id="15"></button>
+          <button data-id="16"></button>
+        </div>
+        <div class="mass">
+          <button data-id="12"></button>
+          <button data-id="17"></button>
+          <button data-id="18"></button>
+          <button data-id="19"></button>
+        </div>
+        <div class="mass">
+          <button data-id="20"></button>
+          <button data-id="23"></button>
+          <button data-id="24"></button>
+          <button data-id="30"></button>
+        </div>
+        <div class="mass">
+          <button data-id="21"></button>
+          <button data-id="25"></button>
+          <button data-id="26"></button>
+          <button data-id="31"></button>
+        </div>
+        <div class="mass">
+          <button data-id="22"></button>
+          <button data-id="27"></button>
+          <button data-id="28"></button>
+          <button data-id="29"></button>
+          <button data-id="32"></button>
+        </div>
+      </div>
+    </div>
+    <span class="redText">Red turn</span>
+    <div>
+      <button class="undo">undo</button>
+    </div>
+  </div>
+</body>
+</html>
