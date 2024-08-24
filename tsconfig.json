@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig to read more about this file */
+
+    /* Projects */
+    "rootDir": "./src",
+    "outDir": "./build", // ファイルの出力先
+
+    /* Language and Environment */
+    "target": "es2016",
+    
+    /* Modules */
+    "module": "commonjs",
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+    "sourceMap": true, // mapファイルを生成しブラウザ上でTypeScriptを確認できるようになる
+    "removeComments": true, // コメントをJSファイルに出力しない 
+    "noEmitOnError": true, // エラー発生時、ファイル出力しない
+    
+    "strictNullChecks": true, // null, undefinedを他の型に入れれないようにする
+
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "include": [
+    "./src/**/*"
+  ],
+  "exclude": [
+    "./test/**/*"
+  ],
+}

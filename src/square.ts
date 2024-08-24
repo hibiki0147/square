@@ -180,7 +180,7 @@ function testCheckOneShape(index:number, buttons:NodeListOf<HTMLButtonElement>) 
     // }
   }
 }
-function testViewOneShape(index:number, right, bottom, buttons:NodeListOf<HTMLButtonElement>) {
+function testViewOneShape(index:number, right: number, bottom: number, buttons:NodeListOf<HTMLButtonElement>) {
   if(index >= 0 && index < shapeDataList.length) {
     const shape:Shape = new Shape(shapeDataList[index]);
     const data = shape.shiftRight(right)?.shiftBottom(bottom)?.data;
@@ -245,7 +245,7 @@ function check() {
 
 
 class Shape {
-  public data:Array<number>;
+  public data:Array<number> = [];
   public maxWidth = 3;
   public maxLength = 3;
   public oneLine = 9;
