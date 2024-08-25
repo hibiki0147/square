@@ -1,4 +1,4 @@
 export enum Player {
-  red,
+  Red,
   Blue
 }
