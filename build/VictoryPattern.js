@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VictoryPattern = void 0;
+const LineStatus_1 = require("./LineStatus");
 class VictoryPattern {
-    constructor() {
+    constructor(boardDatas) {
         this.shapeDataList = [
             [0, 1, 2],
             [3, 13, 23],
@@ -21,8 +22,83 @@ class VictoryPattern {
             [2, 6, 8, 14, 16, 20],
             [1, 2, 4, 8, 10, 11],
         ];
+        this.boardDatas = boardDatas;
     }
     check() {
+        for (const data of this.shapeDataList) {
+            let shiftRight = 0;
+            let shiftBottom = 0;
+            while (true) {
+                let newShape = this.shiftRight(shiftRight, data);
+                if (newShape === null) {
+                    shiftRight = 0;
+                    shiftBottom++;
+                }
+                else {
+                    shiftRight++;
+                    newShape = this.shiftBottom(shiftBottom, data);
+                    if (newShape === null) {
+                        break;
+                    }
+                    else {
+                        let rOrb = LineStatus_1.LineStatus.None;
+                        let isOk = true;
+                        for (const index of newShape) {
+                            const boardData = this.boardDatas[index];
+                            if (boardData === LineStatus_1.LineStatus.None ||
+                                (rOrb !== 0 && boardData !== rOrb)) {
+                                isOk = false;
+                                break;
+                            }
+                            if (boardData !== LineStatus_1.LineStatus.None &&
+                                rOrb === LineStatus_1.LineStatus.None) {
+                                rOrb = this.boardDatas[index];
+                            }
+                        }
+                        if (isOk && rOrb !== 0) {
+                            setTimeout(() => { alert(rOrb + "の勝ち"); }, 1);
+                            return;
+                        }
+                        else {
+                        }
+                    }
+                }
+            }
+        }
+    }
+    shiftRight(multiple, data) {
+        const newData = [...data];
+        for (let i = 0; i < newData.length; i++) {
+            let newPosition = 0;
+            let plus;
+            if (newData[i] % 10 < 3) {
+                plus = 1 * multiple;
+                newPosition = newData[i] + plus;
+                if (newPosition % 10 >= 3) {
+                    return null;
+                }
+            }
+            else {
+                plus = 2 * multiple;
+                newPosition = newData[i] + plus;
+                if (newPosition % 10 <= 2) {
+                    return null;
+                }
+            }
+            newData[i] += plus;
+        }
+        return newData;
+    }
+    shiftBottom(multiple, data) {
+        const newData = [...data];
+        for (let i = 0; i < newData.length; i++) {
+            let plus = 10 * multiple;
+            newData[i] += plus;
+            if (newData[i] > 32) {
+                return null;
+            }
+        }
+        return newData;
     }
 }
 exports.VictoryPattern = VictoryPattern;

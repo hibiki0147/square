@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-
 const Player_1 = require("./Player");
 const GameStatus_1 = require("./GameStatus");
 const Board_1 = require("./Board");
