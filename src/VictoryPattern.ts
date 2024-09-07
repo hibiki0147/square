@@ -1,14 +1,102 @@
 import { GameResult } from "./GameResult";
 import { LineStatus } from "./LineStatus";
 
+let clearId = 0;
+
 export class VictoryPattern {
+
+  constructor() {
+    // // テスト用コード
+    // switch(document.readyState) {
+    //   case "loading":
+    //     window.addEventListener("DOMContentLoaded", () => {
+    //       this.test();
+    //     });
+    //     break;
+    //   case "interactive":
+    //   case "complete":
+    //     this.test();
+    //     break;
+    // }
+  }
+
+  private test() {
+    const lineButtons:Array<HTMLButtonElement> = [];
+    for(let i = 0; i < 33; i++) {
+      const temp = document.querySelector<HTMLButtonElement>(`button[data-id="${i}"]`);
+      if(temp != null) {
+        lineButtons.push(temp);
+      }
+    }
+
+    this.testShapeListView(lineButtons, 250);
+    // this.testOneShapeListView(17, lineButtons);
+  }
+
+
+  /**
+   * 勝利パターンのチェック網羅チェック。    
+   * 処理フローは、check関数となるべく同一にし、
+   * 視覚的に網羅しているか確認する。
+   * @param lineButtons 
+   */
+  private async testShapeListView(
+    lineButtons:Array<HTMLButtonElement>,
+    timeout:number = 500
+  ) {
+    let index:number = 0;
+    while(index < this.shapeDataList.length) {
+      await this.testOneShapeListView(index, lineButtons, timeout);
+      index++;
+    }
+  }
+
+  private async testOneShapeListView(
+    index:number, 
+    lineButtons:Array<HTMLButtonElement>,
+    timeout:number = 500
+  ) {
+    let data:Array<number> = this.shapeDataList[index];
+    let shiftRight = 0;
+    let shiftBottom = 0;
+    let checkData:Array<number> | null = [...data];
+    while(true) {
+      // let gameResult = this.check_thisShape(boardDatas, checkData);
+      // if(gameResult !== null) { // 戻り値チェック
+      //   return gameResult;
+      // } else {
+      for(const elem of lineButtons) { elem.style.backgroundColor = "Black"; }
+      for(const index of checkData) {
+        if(index >= 0 && index < lineButtons.length) {
+          lineButtons[index].style.backgroundColor = "Red";
+        }
+      }
+      await new Promise(resolve => setTimeout(resolve, timeout));
+      console.log("500ミリ秒経過");
+
+      shiftRight += 1;
+      checkData = this.shiftRight(shiftRight, data);
+      if(checkData === null) {
+        shiftRight = 0;
+        shiftBottom += 1;
+        checkData = data;
+      }
+      checkData = this.shiftBottom(shiftBottom, checkData);
+      if(checkData === null) {
+        for(const elem of lineButtons) { elem.style.backgroundColor = "Black"; }
+        break;
+      }
+      // }
+    }
+  }
+
   
   /**
    * 勝敗をチェックする
    * 
    * @returns GameResult | null 対戦結果か継続の場合、null
    */
-  public check_20240826(boardDatas:Array<LineStatus>):GameResult | null{
+  public check(boardDatas:Array<LineStatus>):GameResult | null{
     for(const data of this.shapeDataList) {
       let shiftRight = 0;
       let shiftBottom = 0;
@@ -23,15 +111,22 @@ export class VictoryPattern {
           if(checkData === null) {
             shiftRight = 0;
             shiftBottom += 1;
-            checkData = this.shiftBottom(shiftBottom, data);
-            if(checkData === null) {
-              break;
-            }
+            checkData = data;
+          }
+          checkData = this.shiftBottom(shiftBottom, checkData);
+          if(checkData === null) {
+            break;
           }
         }
       }
     }
-    return null;
+    // 全部埋まっているか確認
+    for(const boardData of boardDatas) {
+      if(boardData === LineStatus.None) {
+        return null;
+      }
+    }
+    return GameResult.Draw;
   }
 
 
@@ -60,8 +155,6 @@ export class VictoryPattern {
       }
     }
     if(isOk && targetPlayer !== LineStatus.None) {
-      // UI描画を先にするためsetTimeout
-      // setTimeout(() => { alert(targetPlayer + "の勝ち"); }, 1);
       if(targetPlayer === LineStatus.Red) {
         return GameResult.RedWin;
       } else {
@@ -72,49 +165,7 @@ export class VictoryPattern {
     }
   }
 
-  public check(boardDatas:Array<LineStatus>) {
-    for(const data of this.shapeDataList) {
-      let shiftRight = 0;
-      let shiftBottom = 0;
-      while(true) {
-        let newShape = this.shiftRight(shiftRight, data);
-        if(newShape === null) {
-          shiftRight = 0;
-          shiftBottom++;
-        } else {
-          shiftRight++;
-          newShape = this.shiftBottom(shiftBottom, data);
-          if(newShape === null) {
-            break;
-          } else {
-            let rOrb:LineStatus = LineStatus.None;
-            let isOk = true;
-            for(const index of newShape) {
-              const boardData:LineStatus = boardDatas[index];
-              if(boardData === LineStatus.None || 
-                (rOrb !== 0 && boardData !== rOrb)) {
-                isOk = false;
-                break;
-              }
-              if(
-                boardData !== LineStatus.None as LineStatus && 
-                rOrb === LineStatus.None as LineStatus
-              ) {
-                rOrb = boardDatas[index];
-              }
-            }
-            if(isOk && rOrb !== 0) {
-              // UI描画を先にするためsetTimeout
-              setTimeout(() => { alert(rOrb + "の勝ち"); }, 1);
-              return;
-            } else {
-              // console.log(newShape.data);
-            }
-          }
-        }
-      }
-    }
-  }
+  
 
   /**
    * 右へ移動
@@ -183,8 +234,11 @@ export class VictoryPattern {
     [0, 3, 5, 13, 14], // 台形１（縦下向き）2-1       10
     [1, 4, 6, 13, 14], // 台形２ 2-1                 11
     [6, 7, 14, 16, 20], // 台形２（反転）2-1          12
-    [1, 4, 6, 10], // ひし形 1*1                     13
-    [2, 6, 8, 14, 16, 20], // ひし形 2*1             14
-    [1, 2, 4, 8, 10, 11], // ひし形 1*2              15
+    [1, 4, 6, 10], // ひし形１ 1*1                     13
+    [2, 6, 8, 14, 16, 20], // ひし形１ 2*1             14
+    [1, 2, 4, 8, 10, 11], // ひし形１ 1*2              15
+    [4, 5, 13, 14], // ひし形２ 1*1                     16
+    [6, 7, 14, 16, 23, 24], // ひし形２ 2*1              17
+    [4, 5, 13, 15, 23, 24], // ひし形２ 1*2              18
   ]
 }

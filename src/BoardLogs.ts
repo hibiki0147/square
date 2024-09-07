@@ -2,10 +2,12 @@ import { LineStatus } from "./LineStatus";
 
 export class BoardLogs {
   private boardLogDatas:Array<Array<LineStatus>> = [];
-  private nowLogsIndex:number;
+  private nowLogsIndex:number; 
 
-  constructor() {
+  constructor(initBoardDatas:Array<LineStatus>) {
     this.nowLogsIndex = 0;
+    this.push(initBoardDatas);
+    console.log(this.boardLogDatas);
   }
 
   public push(boardDatas:Array<LineStatus>):void {
@@ -17,16 +19,16 @@ export class BoardLogs {
   public undo():Array<LineStatus> | null {
     if(this.nowLogsIndex > 0) {
       this.nowLogsIndex--;
-      return this.boardLogDatas[this.nowLogsIndex];
+      return [...this.boardLogDatas[this.nowLogsIndex]];
     } else {
       return null;
     }
   }
 
   public redo():Array<LineStatus> | null {
-    if(this.nowLogsIndex + 1 < boardRecord.length) {
+    if(this.nowLogsIndex + 1 < this.boardLogDatas.length) {
       this.nowLogsIndex++;
-      return this.boardLogDatas[this.nowLogsIndex];
+      return [...this.boardLogDatas[this.nowLogsIndex]];
     } else {
       return null;
     }
@@ -34,9 +36,14 @@ export class BoardLogs {
 
   public getNowBoardData():Array<LineStatus> | null {
     if(this.nowLogsIndex >= 0 && this.nowLogsIndex < this.boardLogDatas.length) {
-      return this.boardLogDatas[this.nowLogsIndex];
+      return [...this.boardLogDatas[this.nowLogsIndex]];
     } else {
       return null;
     }
+  }
+
+  public reset() {
+    this.boardLogDatas = [];
+    this.nowLogsIndex = 0;
   }
 }

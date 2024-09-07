@@ -1,1 +1,1 @@
-{"version":3,"file":"GameResult.js","sourceRoot":"","sources":["../src/GameResult.ts"],"names":[],"mappings":";;;AAAA,IAAY,UAIX;AAJD,WAAY,UAAU;IACpB,+CAAM,CAAA;IACN,iDAAO,CAAA;IACP,2CAAI,CAAA;AACN,CAAC,EAJW,UAAU,0BAAV,UAAU,QAIrB"}
+{"version":3,"file":"GameResult.js","sourceRoot":"","sources":["../src/GameResult.ts"],"names":[],"mappings":";;;;IAAA,IAAY,UAIX;IAJD,WAAY,UAAU;QACpB,+CAAM,CAAA;QACN,iDAAO,CAAA;QACP,2CAAI,CAAA;IACN,CAAC,EAJW,UAAU,0BAAV,UAAU,QAIrB"}
