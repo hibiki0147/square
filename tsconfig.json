@@ -7,10 +7,10 @@
     "outDir": "./build", // ファイルの出力先
 
     /* Language and Environment */
-    "target": "es2016",
+    "target": "es2015",
     
     /* Modules */
-    "module": "commonjs",
+    "module": "AMD",// commonjs
 
     /* Interop Constraints */
     "esModuleInterop": true,
