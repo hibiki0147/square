@@ -13,6 +13,9 @@
     data-main="./Game.js"
   ></script>
   <style>
+    html {
+      touch-action: manipulation;
+    }
     body {
       margin: 0;
       padding: 0;
@@ -22,7 +25,9 @@
       flex-direction: column;
       align-items: center;
       height: 100vh;
+      height: 100dvb;
       width: 100%;
+      overflow: hidden;
     }
     .gameArea {
       display: flex;
@@ -84,6 +89,8 @@
       background-color: black;
       border: solid 1px black;
       border-radius: 16px;
+      padding: 0;
+      margin: 0;
     }
     .mass button:nth-child(1) {
       top: 0;
@@ -129,11 +136,11 @@
       <span class="blueText">Blue turn</span>
       <div class="board_wrap">
         <div class="leftButtonArea">
-          <button class="undo btn btn-outline-dark">
+          <button class="undo btn btn-outline-dark" disabled>
             <i class="bi bi-backspace"></i>
             1つ戻る
           </button>
-          <button class="redo btn btn-outline-dark">
+          <button class="redo btn btn-outline-dark" disabled>
             1つ進む
             <i class="bi bi-backspace-reverse"></i>
           </button>
@@ -198,11 +205,11 @@
     </div>
 
     <div class="bottonButtonArea">
-      <button class="btn btn-outline-primary">
+      <!-- <button class="btn btn-outline-primary">
         <i class="bi bi-house"></i>
         ホーム
-      </button>
-      <button class="btn btn-outline-primary">
+      </button> -->
+      <button class="reset btn btn-outline-primary" disabled>
         <i class="bi bi-controller"></i>
         新しいゲーム
       </button>

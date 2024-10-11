@@ -1,4 +1,4 @@
-define(["require", "exports", "./Button", "./TurnText", "./LineButton"], function (require, exports, Button_1, TurnText_1, LineButton_1) {
+define(["require", "exports", "./Button", "./TurnText", "./LineButton", "./GameResult"], function (require, exports, Button_1, TurnText_1, LineButton_1, GameResult_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.GameUI = void 0;
@@ -7,6 +7,7 @@ define(["require", "exports", "./Button", "./TurnText", "./LineButton"], functio
             this.lineButtons = [];
             this.undoButton = new Button_1.Button(".undo", undoEvent);
             this.redoButton = new Button_1.Button(".redo", redoEvent);
+            this.resetButton = new Button_1.Button(".reset", resetEvent);
             for (let i = 0; i < 33; i++) {
                 this.lineButtons.push(new LineButton_1.LineButton(`button[data-id="${i}"]`, lineEvent));
             }
@@ -32,6 +33,35 @@ define(["require", "exports", "./Button", "./TurnText", "./LineButton"], functio
         }
         toggleViewTurnText(turnPlayer) {
             this.turnText.toggleViewTurnText(turnPlayer);
+        }
+        getResetButtonEnable() {
+            return this.resetButton.getEnable();
+        }
+        setResetButtonEnable(value) {
+            this.resetButton.setEnable(value);
+        }
+        setUndoButtonEnable(value) {
+            this.undoButton.setEnable(value);
+        }
+        setRedoButtonEnable(value) {
+            this.redoButton.setEnable(value);
+        }
+        viewVictoryEffect(gameResult) {
+            let message = "";
+            switch (gameResult) {
+                case GameResult_1.GameResult.RedWin:
+                    message = "赤プレイヤーの勝利";
+                    break;
+                case GameResult_1.GameResult.BlueWin:
+                    message = "青プレイヤーの勝利";
+                    break;
+                case GameResult_1.GameResult.Draw:
+                    message = "引き分け";
+                    break;
+            }
+            setTimeout(() => {
+                window.alert(message);
+            }, 1);
         }
     }
     exports.GameUI = GameUI;

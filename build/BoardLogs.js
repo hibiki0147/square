@@ -15,7 +15,7 @@ define(["require", "exports"], function (require, exports) {
             this.nowLogsIndex = this.boardLogDatas.length - 1;
         }
         undo() {
-            if (this.nowLogsIndex > 0) {
+            if (this.canUndo()) {
                 this.nowLogsIndex--;
                 return [...this.boardLogDatas[this.nowLogsIndex]];
             }
@@ -24,7 +24,7 @@ define(["require", "exports"], function (require, exports) {
             }
         }
         redo() {
-            if (this.nowLogsIndex + 1 < this.boardLogDatas.length) {
+            if (this.canRedo()) {
                 this.nowLogsIndex++;
                 return [...this.boardLogDatas[this.nowLogsIndex]];
             }
@@ -40,8 +40,15 @@ define(["require", "exports"], function (require, exports) {
                 return null;
             }
         }
-        reset() {
+        canUndo() {
+            return this.nowLogsIndex > 0;
+        }
+        canRedo() {
+            return this.nowLogsIndex + 1 < this.boardLogDatas.length;
+        }
+        reset(initBoardDatas) {
             this.boardLogDatas = [];
+            this.push(initBoardDatas);
             this.nowLogsIndex = 0;
         }
     }

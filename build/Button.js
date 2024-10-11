@@ -7,14 +7,16 @@ define(["require", "exports"], function (require, exports) {
             console.log(query + ":Button初期化" + document.readyState);
             switch (document.readyState) {
                 case "loading":
-                case "interactive":
                     window.addEventListener("DOMContentLoaded", () => {
                         this.init(query, listener);
                     });
                     break;
+                case "interactive":
                 case "complete":
                     this.init(query, listener);
                     break;
+                default:
+                    throw Error("Button Error:UIの初期化に失敗しました");
             }
         }
         init(query, listener) {
@@ -28,6 +30,22 @@ define(["require", "exports"], function (require, exports) {
                 this.button.addEventListener("click", (ev) => {
                     listener(buttonTmp, ev);
                 });
+            }
+        }
+        setEnable(value) {
+            if (this.button !== undefined) {
+                this.button.disabled = !value;
+            }
+            else {
+                throw Error("Button Error:ボタンが初期化されていない状態です");
+            }
+        }
+        getEnable() {
+            if (this.button !== undefined) {
+                return !this.button.disabled;
+            }
+            else {
+                throw Error("Button Error:ボタンが初期化されていない状態です");
             }
         }
     }

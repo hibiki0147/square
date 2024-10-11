@@ -17,7 +17,7 @@ export class BoardLogs {
   }
 
   public undo():Array<LineStatus> | null {
-    if(this.nowLogsIndex > 0) {
+    if(this.canUndo()) {
       this.nowLogsIndex--;
       return [...this.boardLogDatas[this.nowLogsIndex]];
     } else {
@@ -26,7 +26,7 @@ export class BoardLogs {
   }
 
   public redo():Array<LineStatus> | null {
-    if(this.nowLogsIndex + 1 < this.boardLogDatas.length) {
+    if(this.canRedo()) {
       this.nowLogsIndex++;
       return [...this.boardLogDatas[this.nowLogsIndex]];
     } else {
@@ -42,8 +42,17 @@ export class BoardLogs {
     }
   }
 
-  public reset() {
+  public canUndo():boolean {
+    return this.nowLogsIndex > 0;
+  }
+
+  public canRedo():boolean {
+    return this.nowLogsIndex + 1 < this.boardLogDatas.length;
+  }
+
+  public reset(initBoardDatas:Array<LineStatus>) {
     this.boardLogDatas = [];
+    this.push(initBoardDatas);
     this.nowLogsIndex = 0;
   }
 }
