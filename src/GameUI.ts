@@ -3,17 +3,18 @@ import { Button } from "./Button";
 import { TurnText } from "./TurnText";
 import { LineStatus } from "./LineStatus";
 import { LineButton } from "./LineButton";
+import { GameResult } from "./GameResult";
 
 export class GameUI {
-  private undoButton:Button;
-  private redoButton:Button;
-  
-  // private resetButton:Button;
+  private readonly undoButton:Button;
+  private readonly redoButton:Button;
+  private readonly resetButton:Button;
+
   // private homeButton:Button;
 
-  private lineButtons:Array<LineButton> = [];
+  private readonly lineButtons:Array<LineButton> = [];
 
-  private turnText:TurnText;
+  private readonly turnText:TurnText;
 
   constructor(
     undoEvent: (element: HTMLButtonElement, ev: MouseEvent) => void,
@@ -25,7 +26,7 @@ export class GameUI {
     this.undoButton = new Button(".undo",undoEvent);
     this.redoButton = new Button(".redo", redoEvent);
     
-    // this.resetButton = new Button(".reset",resetEvent);
+    this.resetButton = new Button(".reset",resetEvent);
     // this.homeButton = new Button(".home", homeEvent);
 
     for(let i = 0; i < 33; i++) {
@@ -59,6 +60,40 @@ export class GameUI {
     this.turnText.toggleViewTurnText(turnPlayer);
   }
 
+
+  public getResetButtonEnable() {
+    return this.resetButton.getEnable();
+  }
+
+  public setResetButtonEnable(value:boolean) {
+    this.resetButton.setEnable(value);
+  }
+
+  public setUndoButtonEnable(value:boolean) {
+    this.undoButton.setEnable(value);
+  }
+
+  public setRedoButtonEnable(value:boolean) {
+    this.redoButton.setEnable(value);
+  }
+
+  public viewVictoryEffect(gameResult:GameResult) {
+    let message = "";
+    switch(gameResult) {
+      case GameResult.RedWin:
+        message = "赤プレイヤーの勝利";
+        break;
+      case GameResult.BlueWin:
+        message = "青プレイヤーの勝利";
+        break;
+      case GameResult.Draw:
+        message = "引き分け";
+        break;
+    }
+    setTimeout(() => {
+      window.alert(message);
+    }, 1);
+  }
   
 
 }

@@ -45,7 +45,7 @@ define(["require", "exports", "./BoardLogs", "./LineStatus", "./VictoryPattern"]
             for (let i = 0; i < this.boardDatas.length; i++) {
                 this.boardDatas[i] = LineStatus_1.LineStatus.None;
             }
-            this.boardLogs.reset();
+            this.boardLogs.reset(this.boardDatas);
         }
         isChangeableLine(index) {
             if (index >= 0 && index < this.boardDatas.length) {
@@ -54,6 +54,12 @@ define(["require", "exports", "./BoardLogs", "./LineStatus", "./VictoryPattern"]
             else {
                 throw Error(`Board Error:IndexOutOfBoundsExceptionです. index=[${index}]`);
             }
+        }
+        canUndo() {
+            return this.boardLogs.canUndo();
+        }
+        canRedo() {
+            return this.boardLogs.canRedo();
         }
         getBoardDatas() {
             return this.boardDatas;

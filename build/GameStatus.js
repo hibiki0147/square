@@ -5,7 +5,8 @@ define(["require", "exports"], function (require, exports) {
     var GameStatus;
     (function (GameStatus) {
         GameStatus[GameStatus["Progress"] = 0] = "Progress";
-        GameStatus[GameStatus["End"] = 1] = "End";
+        GameStatus[GameStatus["TmpProgress"] = 1] = "TmpProgress";
+        GameStatus[GameStatus["End"] = 2] = "End";
     })(GameStatus || (exports.GameStatus = GameStatus = {}));
 });
 //# sourceMappingURL=GameStatus.js.map

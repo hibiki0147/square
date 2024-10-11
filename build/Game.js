@@ -1,4 +1,4 @@
-define(["require", "exports", "./Player", "./GameStatus", "./GameResult", "./Board", "./LineStatus", "./GameUI"], function (require, exports, Player_1, GameStatus_1, GameResult_1, Board_1, LineStatus_1, GameUI_1) {
+define(["require", "exports", "./Player", "./GameStatus", "./Board", "./LineStatus", "./GameUI"], function (require, exports, Player_1, GameStatus_1, Board_1, LineStatus_1, GameUI_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Game = void 0;
@@ -12,7 +12,7 @@ define(["require", "exports", "./Player", "./GameStatus", "./GameResult", "./Boa
             this.changeTurn(Player_1.Player.Red);
         }
         lineEvent(element, ev) {
-            if (this.gameStatus === GameStatus_1.GameStatus.Progress) {
+            if (this.gameStatus !== GameStatus_1.GameStatus.End) {
                 if (element.dataset.id != null) {
                     const id = Number(element.dataset.id);
                     const lineState = this.turnPlayer === Player_1.Player.Red ? LineStatus_1.LineStatus.Red : LineStatus_1.LineStatus.Blue;
@@ -22,7 +22,15 @@ define(["require", "exports", "./Player", "./GameStatus", "./GameResult", "./Boa
                         if (result != null) {
                             this.victoryEffect(result);
                         }
+                        else {
+                            if (this.gameStatus === GameStatus_1.GameStatus.TmpProgress) {
+                                this.gameStatus = GameStatus_1.GameStatus.Progress;
+                            }
+                        }
                         this.changeTurn();
+                        this.gameUI.setUndoButtonEnable(true);
+                        this.gameUI.setRedoButtonEnable(false);
+                        this.gameUI.setResetButtonEnable(true);
                     }
                 }
                 else {
@@ -32,21 +40,7 @@ define(["require", "exports", "./Player", "./GameStatus", "./GameResult", "./Boa
         }
         victoryEffect(gameResult) {
             this.gameResult = gameResult;
-            let message = "";
-            switch (this.gameResult) {
-                case GameResult_1.GameResult.RedWin:
-                    message = "赤プレイヤーの勝利";
-                    break;
-                case GameResult_1.GameResult.BlueWin:
-                    message = "青プレイヤーの勝利";
-                    break;
-                case GameResult_1.GameResult.Draw:
-                    message = "引き分け";
-                    break;
-            }
-            setTimeout(() => {
-                window.alert(message);
-            }, 1);
+            this.gameUI.viewVictoryEffect(this.gameResult);
             this.gameStatus = GameStatus_1.GameStatus.End;
         }
         undoEvent(element, ev) {
@@ -54,6 +48,13 @@ define(["require", "exports", "./Player", "./GameStatus", "./GameResult", "./Boa
             if (result) {
                 this.changeTurn();
                 this.gameUI.changeLineButtonsColor(this.board.getBoardDatas());
+                if (this.board.canUndo() === false) {
+                    this.gameUI.setUndoButtonEnable(false);
+                }
+                this.gameUI.setRedoButtonEnable(true);
+                if (this.gameStatus === GameStatus_1.GameStatus.End) {
+                    this.gameStatus = GameStatus_1.GameStatus.TmpProgress;
+                }
             }
         }
         redoEvent(element, ev) {
@@ -61,12 +62,23 @@ define(["require", "exports", "./Player", "./GameStatus", "./GameResult", "./Boa
             if (result) {
                 this.changeTurn();
                 this.gameUI.changeLineButtonsColor(this.board.getBoardDatas());
+                this.gameUI.setUndoButtonEnable(true);
+                if (this.board.canRedo() === false) {
+                    this.gameUI.setRedoButtonEnable(false);
+                    if (this.gameStatus === GameStatus_1.GameStatus.TmpProgress) {
+                        this.gameStatus = GameStatus_1.GameStatus.End;
+                    }
+                }
             }
         }
         resetEvent(element, ev) {
             this.board.reset();
             this.changeTurn(Player_1.Player.Red);
             this.gameStatus = GameStatus_1.GameStatus.Progress;
+            this.gameUI.changeLineButtonsColor(this.board.getBoardDatas());
+            this.gameUI.setUndoButtonEnable(false);
+            this.gameUI.setRedoButtonEnable(false);
+            this.gameUI.setResetButtonEnable(false);
         }
         changeTurn(nextPlayer) {
             if (nextPlayer === undefined) {

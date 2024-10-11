@@ -5,8 +5,8 @@ import { VictoryPattern } from "./VictoryPattern";
 
 export class Board {
   private boardDatas:Array<LineStatus> = [];
-  private boardLogs:BoardLogs;
-  private victoryPattern:VictoryPattern;
+  private readonly boardLogs:BoardLogs;
+  private readonly victoryPattern:VictoryPattern;
 
   constructor(boardLineSum:number) {
     for(let i = 0; i < boardLineSum; i++) {
@@ -50,7 +50,7 @@ export class Board {
     for(let i = 0; i < this.boardDatas.length; i++) {
       this.boardDatas[i] = LineStatus.None;
     }
-    this.boardLogs.reset();
+    this.boardLogs.reset(this.boardDatas);
   }
 
   public isChangeableLine(index:number):boolean {
@@ -61,6 +61,13 @@ export class Board {
     }
   }
 
+  public canUndo():boolean {
+    return this.boardLogs.canUndo();
+  }
+
+  public canRedo():boolean {
+    return this.boardLogs.canRedo();
+  }
   
   public getBoardDatas():Array<LineStatus> {
     return this.boardDatas;

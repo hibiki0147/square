@@ -1,8 +1,8 @@
 import { Player } from "./Player";
 
 export class TurnText {
-  private redText:HTMLSpanElement;
-  private blueText:HTMLSpanElement;
+  private readonly redText:HTMLSpanElement;
+  private readonly blueText:HTMLSpanElement;
 
   constructor() {
     const redTextTmp = document.querySelector<HTMLSpanElement>(".redText");
